@@ -15,7 +15,7 @@ public class Cube240 : MonoBehaviour, IInputClickHandler
     {
         customMessage = CustomMessages240.Instance;
 
-        // 指定收到Cube位置消息后的处理方法
+        // 指定收到Cube位置变化消息后的处理方法
         customMessage.MessageHandlers[CustomMessages240.CustomMessageID.CubePosition] = OnCubePositionReceived;
     }
 
@@ -24,7 +24,7 @@ public class Cube240 : MonoBehaviour, IInputClickHandler
         // 同步Cube位置
         if (!isMoving)
         {
-            transform.position = CustomMessages240.ReadCubePosition(msg);
+            transform.localPosition = CustomMessages240.ReadCubePosition(msg);
         }
     }
 
@@ -35,7 +35,7 @@ public class Cube240 : MonoBehaviour, IInputClickHandler
         // 放置Cube后，发送Cube的位置消息给其他人
         if (!isMoving)
         {
-            customMessage.SendCubePosition(transform.position);
+            customMessage.SendCubePosition(transform.localPosition);
         }
     }
 
@@ -45,8 +45,7 @@ public class Cube240 : MonoBehaviour, IInputClickHandler
         if (isMoving)
         {
             transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2f;
-            // 实时传递Cube位置
-            customMessage.SendCubePosition(transform.position, MessageReliability.UnreliableSequenced);
+            customMessage.SendCubePosition(transform.localPosition, MessageReliability.UnreliableSequenced);
         }
     }
 }
